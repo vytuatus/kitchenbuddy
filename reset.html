@@ -64,10 +64,10 @@
       const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp6YXNxemltZGdueHl1ZmtzZW9iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkwNjg5MjksImV4cCI6MjA2NDY0NDkyOX0.-YdIeRgiComab72X-sjXQHkLVEuEDZzh9wwuw53XgY0"; // safe in frontend
       const client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-      const urlParams = new URLSearchParams(window.location.search);
-      const token = urlParams.get("token");
-      const type = urlParams.get("type") || "recovery";
-      const email = urlParams.get("email");
+      const hashParams = new URLSearchParams(window.location.hash.substring(1));
+      const access_token = hashParams.get("access_token");
+      const refresh_token = hashParams.get("refresh_token");
+      const type = hashParams.get("type");
 
       const messageEl = document.getElementById("message");
       const resetBtn = document.getElementById("reset-btn");
@@ -85,22 +85,17 @@
         messageEl.textContent = "Processing...";
 
         try {
-          // 1. Verify token from email
-          const { data, error } = await client.auth.verifyOtp({
-            token,
-            type, // usually "recovery"
-            email,
+          // 1. Set session using the access + refresh tokens
+          const { error: sessionError } = await client.auth.setSession({
+            access_token,
+            refresh_token,
           });
-
-          if (error) throw error;
-
+          if (sessionError) throw sessionError;
+    
           // 2. Update password
-          const { error: updateError } = await client.auth.updateUser({
-            password,
-          });
-
+          const { error: updateError } = await client.auth.updateUser({ password });
           if (updateError) throw updateError;
-
+    
           messageEl.textContent =
             "✅ Password reset successful! You can close this page and log in with your new password.";
         } catch (err) {
