@@ -25,6 +25,7 @@
     const resetBtn = document.getElementById("reset-btn");
 
     const params = new URLSearchParams(window.location.search);
+    console.log(params);
     const token = params.get("token") || params.get("code");
     const email = params.get("email"); // Pass email in the recovery link
 
@@ -67,3 +68,4 @@
   </script>
 </body>
 </html>
+
