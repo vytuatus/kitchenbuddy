@@ -86,7 +86,12 @@
 
         try {
           // 1. Exchange code for a session
-          const { data, error } = await client.auth.exchangeCodeForSession(code);
+          console.log("🔗 Full redirect URL:", window.location.href);
+
+          const { data, error } = await client.auth.exchangeCodeForSession(window.location.href);
+          if (error) throw error;
+
+          console.log("✅ Session established:", data.session);
           if (error) throw error;
 
           // 2. Update password
