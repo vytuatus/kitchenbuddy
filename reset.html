@@ -29,9 +29,9 @@
     const params = new URLSearchParams(window.location.search);
     console.log(params);
     const token = params.get("token") || params.get("code");
-    const email = params.get("email"); // Pass email in the recovery link
+    // const email = params.get("email"); // Pass email in the recovery link
 
-    if (!token || !email) {
+    if (!token) {
       messageEl.textContent = "Invalid or missing recovery link.";
       resetBtn.disabled = true;
     }
@@ -49,10 +49,10 @@
       messageEl.textContent = "Processing...";
 
       try {
-        const res = await fetch("https://<project>.functions.supabase.co/reset-password", {
+        const res = await fetch("https://zzasqzimdgnxyufkseob.supabase.co/functions/v1/swift-worker", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ token, email, newPassword: password })
+          body: JSON.stringify({ token, newPassword: password })
         });
 
         const data = await res.json();
@@ -70,5 +70,6 @@
   </script>
 </body>
 </html>
+
 
 
