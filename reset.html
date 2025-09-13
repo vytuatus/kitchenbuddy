@@ -25,7 +25,13 @@
     const resetBtn = document.getElementById("reset-btn");
 
     const params = new URLSearchParams(window.location.search);
-    const token = params.get("token") || params.get("code"); // handle both
+    const token = params.get("token") || params.get("code");
+    const email = params.get("email"); // Pass email in the recovery link
+
+    if (!token || !email) {
+      messageEl.textContent = "Invalid or missing recovery link.";
+      resetBtn.disabled = true;
+    }
 
     resetBtn.onclick = async () => {
       const password = document.getElementById("new-password").value;
@@ -40,13 +46,14 @@
       messageEl.textContent = "Processing...";
 
       try {
-        const res = await fetch("https://zzasqzimdgnxyufkseob.supabase.co/functions/v1/swift-worker", {
+        const res = await fetch("https://<project>.functions.supabase.co/reset-password", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ token, newPassword: password })
+          body: JSON.stringify({ token, email, newPassword: password })
         });
 
         const data = await res.json();
+
         if (!res.ok) throw new Error(data?.error || "Failed to reset password");
 
         messageEl.textContent = "✅ Password reset successful!";
@@ -60,4 +67,3 @@
   </script>
 </body>
 </html>
-
