@@ -59,6 +59,8 @@
     <div class="message" id="message"></div>
 
     <script>
+      console.log("🔗 Full URL:", window.location.href);
+      console.log("🔗 Hash part:", window.location.hash);
       const { createClient } = supabase;
       const SUPABASE_URL = "https://zzasqzimdgnxyufkseob.supabase.co";
       const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp6YXNxemltZGdueHl1ZmtzZW9iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkwNjg5MjksImV4cCI6MjA2NDY0NDkyOX0.-YdIeRgiComab72X-sjXQHkLVEuEDZzh9wwuw53XgY0"; // safe in frontend
